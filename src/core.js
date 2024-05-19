@@ -79,7 +79,11 @@ export function canDrive(age, countryCode) {
 }
 
 // Lesson: Testing asynchronous code
-export function fetchData() {
+export function fetchData(fail) {
+  if (!fail) {
+    return Promise.reject({ reason: "Failed" });
+  }
+
   return new Promise((resolve) => {
     setTimeout(() => {
       const data = [1, 2, 3];

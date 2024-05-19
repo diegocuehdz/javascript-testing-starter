@@ -1,6 +1,15 @@
-import { it, expect, describe } from "vitest";
+import {
+  it,
+  expect,
+  describe,
+  beforeEach,
+  beforeAll,
+  afterAll,
+  afterEach,
+} from "vitest";
 
 import {
+  Stack,
   calculateDiscount,
   canDrive,
   fetchData,
@@ -176,8 +185,46 @@ describe("canDrive test cases", () => {
 
 describe("fetchData rest cases", () => {
   it("should return a promise that will resolve an array of number", async () => {
-    const result = await fetchData();
+    const result = await fetchData(true);
     expect(Array.isArray(result)).toBe(true);
     expect(result.length).toBeGreaterThan(0);
+  });
+
+  it("should return a promise that will reject ", async () => {
+    try {
+      const result = await fetchData(false);
+    } catch (error) {
+      expect(error).toHaveProperty("reason");
+      expect(error.reason).toMatch(/failed/i);
+    }
+  });
+});
+
+describe("Stack test cases", () => {
+  it("should add an item to the stack", () => {
+    const stack = new Stack();
+
+    stack.push(1);
+
+    expect(stack.items).toEqual([1]);
+  });
+
+  it("should remove and return the top item from the stack", () => {
+    const stack = new Stack();
+    stack.push(1);
+    stack.push(2);
+
+    const poppedItem = stack.pop();
+
+    expect(poppedItem).toBe(2);
+    expect(stack.items).toEqual([1]);
+  });
+
+  it("should throw an error if the stack is empty", () => {
+    const stack = new Stack();
+
+    expect(() => {
+      stack.pop();
+    }).toThrow(/empty/i);
   });
 });
